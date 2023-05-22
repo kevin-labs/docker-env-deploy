@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+
+  glances:
+    image: nicolargo/glances:latest-full
+    network_mode: hosting_running_network
+    restart: always
+    pid: host
+    environment:
+      - 'TZ=Asia/Shanghai'
+      - 'GLANCES_OPT=-C /etc/glances.conf -w'
+    ports:
+      - '61208-61209:61208-61209'
+    volumes:
+      - './glances.conf:/etc/glances.conf'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    container_name: glances

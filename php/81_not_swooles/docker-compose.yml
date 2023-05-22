@@ -1,0 +1,23 @@
+version: '3.3'
+services:
+
+  # php
+  php:
+    image: joseluisq/php-fpm:8.1
+    network_mode: hosting_running_network
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    expose:
+      - 9001
+    # ports:
+    #   - '127.0.0.1:9000:9000'
+    volumes:
+      - ../../../html:/var/www/html
+      - ./conf.d/:/usr/local/etc/php/conf.d/
+    environment:
+      - "ENV_SUBSTITUTION_ENABLE=true"
+      - "PHP_MEMORY_LIMIT=512M"
+      - "PHP_FPM_LISTEN=9000"
+      - "PHP_SESSION_GC_MAXLIFETIME=7200"
+    container_name: php_81_no_swooles
