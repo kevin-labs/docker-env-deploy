@@ -1,0 +1,18 @@
+version: "2.1"
+services:
+  code-server:
+    image: linuxserver/code-server:latest
+    restart: always 
+    mem_limit: 215M
+    memswap_limit: 512M
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Asia/Shanghai
+      - PASSWORD=password
+      - DEFAULT_WORKSPACE=/workspace
+    volumes:
+      - /../../:/workspace
+    ports:
+      - 8443:8443
+    container_name: code-server
