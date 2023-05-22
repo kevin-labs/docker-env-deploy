@@ -3,7 +3,7 @@ services:
   code-server:
     image: linuxserver/code-server:latest
     restart: always 
-    mem_limit: 215M
+    mem_limit: 512M
     memswap_limit: 512M
     environment:
       - PUID=0
@@ -12,7 +12,7 @@ services:
       - PASSWORD=password
       - DEFAULT_WORKSPACE=/workspace
     volumes:
-      - /../../:/workspace
+      - ../../:/workspace
     ports:
       - 8443:8443
     container_name: code-server

@@ -1,4 +1,5 @@
 services:
+
 - name: service-0
   addr: :80
   handler:
@@ -9,6 +10,7 @@ services:
     nodes:
     - name: target-0
       addr: 192.168.40.2:80
+
 - name: service-1
   addr: :443
   handler:
@@ -19,6 +21,7 @@ services:
     nodes:
     - name: target-1
       addr: 192.168.40.2:443
+
 - name: service-2
   addr: :8084
   handler:
@@ -29,6 +32,7 @@ services:
     nodes:
     - name: target-2
       addr: 192.168.40.2:8084
+      
 - name: service-3
   addr: :2201
   handler:
