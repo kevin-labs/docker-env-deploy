@@ -1,0 +1,102 @@
+version: '3'
+services:
+
+  web:
+    image: nginx:1.23-alpine
+    container_name: web
+    restart: always
+    env_file: .env
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - php
+    links:
+      - php
+    volumes:
+      # html 目录
+      - ./html/:/var/www/html
+      # Nginx 配置
+      # - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf
+      # Nginx 站点配置
+      - ./conf.d/:/etc/nginx/conf.d/
+      # SSL 证书
+      - ./ssl/www:/var/www/certbot/:ro
+      - ./ssl/conf/:/etc/nginx/ssl/:ro
+
+  ssl:
+    image: certbot/certbot
+    container_name: ssl
+    restart: always
+    env_file: .env
+    depends_on:
+      - web
+    volumes:
+      - ./ssl/www/:/var/www/certbot/:rw
+      - ./ssl/conf/:/etc/letsencrypt/:rw
+    # Automatic Certificate Renewal
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+  php:
+    image: joseluisq/php-fpm:8.1
+    container_name: php
+    restart: always
+    env_file: .env
+    expose:
+      - 9000
+    ports:
+      - '172.17.0.1:9000:9000'
+    volumes:
+      # 程序路径
+      - ./html:/var/www/html
+      # 通过替换配置 禁用某些拓展
+      # - ./php/conf.d/docker-php-ext-swoole.ini:/usr/local/etc/php/conf.d/docker-php-ext-swoole.ini
+      # 通过环境变量进行设置
+      # - ./php/conf.d/default-php.ini:/usr/local/etc/php/conf.d/default-php.ini
+      # 替换整个配置文件夹 提前 cp conf.d
+      # - ./php/conf.d/:/usr/local/etc/php/conf.d/
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    restart: always
+    env_file: .env
+    expose:
+      - 3306
+    ports:
+      - '172.17.0.1:3306:3306'
+    volumes:
+      - ./mariadb:/var/lib/mysql
+
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    restart: always
+    env_file: .env
+    expose:
+      - 5432
+    ports:
+      - '172.17.0.1:5432:5432'
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+      
+  redis:
+    image: redis:3-alpine
+    container_name: redis
+    restart: always
+    env_file: .env
+    expose:
+      - 6379
+    ports:
+      - '172.17.0.1:6379:6379'
+      
+  memcached:
+    image: memcached:alpine
+    container_name: memcached
+    restart: always
+    env_file: .env
+    expose:
+      - 11211
+    ports:
+      - '172.17.0.1:11211:11211'
+      

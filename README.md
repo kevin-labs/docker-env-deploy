@@ -1,24 +1,36 @@
-# 使用Docker快速部署Web 应用
 
-使用 Docker 快速 部署 Web 应用的生产环境，一些必要的东西。
+### 使用
 
-- 使用IP下的 Tools 进行管理, 使用命令行进行Docker。
+1. 创建 compose.yml 文件粘贴复制 执行 docker compose pull 下载
+2. 修改 compose.yml 文件 执行 docker compose up 下载
+3. 创建 conf.d/00_.conf 文件 配置默认的nginx站点
+4. 创建 html/public/index.html 文件
+5. 为站点创建证书
 
-- 所有容器都只存在内部网络，只暴露80、443端口。
+### 常用命令
+```
+# nginx logs
+docker logs web -f
+docker exec -it web nginx -t
+docker exec -it web nginx -s reload
 
-- 项目不托管独立的应用，需要托管独立的应用使用 docker-app。
+```
 
-### 环境配置
+### 创建证书
 
-- 使用 Wireguard 完成服务器见的网络组网。
+```
+docker exec -it ssl certbot certonly --webroot --webroot-path /var/www/certbot/ -d domain.com
+```
 
-### 环境组件
+### 创建 站点
 
-- Linux + Nginx + PHP多版本 + MariaDB 基础的环境
-- Postgres 数据
-- Redis 缓存库
-- Email 邮箱服务 maddy.email
-- tools/glances 主机监控
-- tools/code-server 在线编辑器(主机配置要求高)
-- tools/gost 端口转发
-- tools/restic 备份
+1. 按需复制模板
+2. 修改模板
+3. 重启 nginx
+
+### Debian 关闭防火墙
+
+```
+systemctl stop ufw
+systemctl disable ufw
+```
