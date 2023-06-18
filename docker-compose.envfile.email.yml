@@ -101,3 +101,21 @@ services:
       - 11211
     ports:
       - '172.17.0.1:11211:11211'
+  
+  email:
+    image: foxcpp/maddy:latest
+    restart: always
+    depends_on:
+      - ssl
+    links:
+      - ssl
+    volumes:
+      - ./maddy:/data
+      # SSL 证书
+      - ./ssl/www:/var/www/certbot/:ro
+      - ./ssl/:/etc/ssl/:ro
+    ports:
+      - 25:25/tcp # SMTP Transfer->Exchange ClearText
+      - 465:465/tcp # SMTPs User->Submission TLS
+      - 993:993/tcp # IMAPs Delivery->User TLS
+    container_name: email
