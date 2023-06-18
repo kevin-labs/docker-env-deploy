@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  backup:
+    image: lobaro/restic-backup-docker:latest
+    # 这将在Restic快照列表中可见
+    hostname: backup_
+    restart: always
+    privileged: true
+    env_file: .env
+    volumes:
+      - ./conf.d/Backup:/data/conf.d:ro
+      - ./ssl/Backup:/data/ssl:ro
+      - ./html/Backup:/data/html:ro
+      - ./mariadb/Backup:/data/mariadb:ro
+      - ./postgres/Backup:/data/postgres:ro
+      - ./maddy/Backup:/data/maddy:ro
+      
