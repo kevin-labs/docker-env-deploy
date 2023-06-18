@@ -1,3 +1,15 @@
+### Docker 环境安装
+
+https://linuxmirrors.cn/
+```
+bash <(curl -sSL https://linuxmirrors.cn/docker.sh)
+```
+
+启动服务
+```
+systemctl start docker
+service docker start
+```
 
 ### 使用
 
