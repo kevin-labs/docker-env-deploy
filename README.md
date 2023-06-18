@@ -46,3 +46,30 @@ docker exec -it ssl certbot certonly --webroot --webroot-path /var/www/certbot/ 
 systemctl stop ufw
 systemctl disable ufw
 ```
+
+
+### 备份
+
+1. 修改 docker-compose.backup.yml 的 hostname 为主机 backup_ip/tag
+2. 修改 .env 文件中的 备份配置
+3. 执行 docker compose -f docker-compose.backup.yml up -d
+
+CORN 写法
+https://www.runoob.com/w3cnote/linux-crontab-tasks.html
+
+```
+每1分钟执行一次myCommand
+* * * * * myCommand
+每晚的21:30重启smb
+30 21 * * * /etc/init.d/smb restart
+
+每周一上午8点到11点的第3和第15分钟执行
+3,15 8-11 * * 1 myCommand
+```
+
+crontab的命令构成为 时间+动作，其时间有分、时、日、月、周五种，操作符有
+
+- * 取值范围内的所有数字
+- / 每过多少个数字
+- - 从X到Z
+- ，散列数字
